@@ -1,3 +1,4 @@
+import pathlib
 import shutil
 from fastapi import FastAPI
 from fastapi import FastAPI, File, UploadFile
@@ -76,18 +77,18 @@ async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(
     responce = [
       {
       "ann_predictions": {
-        "img": ann_graph_output_path ,
-        "excel":ann_predictions_output_path 
+        "img": pathlib.Path(ann_graph_output_path).resolve().as_uri() ,
+        "excel": pathlib.Path(ann_predictions_output_path).resolve().as_uri() 
       }},
       {
       "lr_predictions": {
-        "img":lr_graph_output_path ,
-        "excel":lr_predictions_output_path 
+        "img":  pathlib.Path(lr_graph_output_path).resolve().as_uri() ,
+        "excel": pathlib.Path(lr_predictions_output_path).resolve().as_uri() ,
       }},
       {
       "svm_predictions": {
-        "img":svm_graph_output_path ,
-        "excel":svm_predictions_output_path ,
+        "img": pathlib.Path(svm_graph_output_path).resolve().as_uri() ,
+        "excel": pathlib.Path(svm_predictions_output_path).resolve().as_uri() ,
       }}
       ]
 
