@@ -15,12 +15,11 @@ async def main_route():
   return {"message": "server is live"}
 
 
-# Define the folder where you want to save the uploaded files
+
 UPLOAD_FOLDER = "data"
 
-# Ensure the upload folder exists
-shutil.rmtree(UPLOAD_FOLDER)
-os.makedirs(UPLOAD_FOLDER)
+
+os.makedirs(UPLOAD_FOLDER,exist_ok=True)
 
 @app.post("/uploadfile/")
 async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(...)):
