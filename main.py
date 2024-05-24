@@ -1,3 +1,4 @@
+import shutil
 from fastapi import FastAPI
 from fastapi import FastAPI, File, UploadFile
 import os
@@ -18,10 +19,12 @@ async def main_route():
 UPLOAD_FOLDER = "data"
 
 # Ensure the upload folder exists
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+shutil.rmtree(UPLOAD_FOLDER)
+os.makedirs(UPLOAD_FOLDER)
 
 @app.post("/uploadfile/")
 async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(...)):
+    
     file_location = os.path.join(UPLOAD_FOLDER, file.filename)
     
     with open(file_location, "wb") as file_object:
@@ -37,6 +40,9 @@ async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(
     # Initialize and run the SVMPredictor
       svm_predictor = SVMPredictor(svm_test_in_path, svm_predictions_output_path, svm_graph_output_path, svm_model_path, svm_scaler_path)
       svm_predictor.run()
+    else:
+      svm_predictions_output_path = None
+      svm_graph_output_path = None
 
     if lr:
       lr_test_in_path = f'data/{file.filename}'
@@ -47,6 +53,10 @@ async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(
 
       lr_predictor = LRPredictor(lr_test_in_path, lr_predictions_output_path, lr_graph_output_path, lr_model_path, lr_scaler_path)
       lr_predictor.run()
+    else:
+      lr_predictions_output_path = None
+      lr_graph_output_path = None
+       
 
 
     if ann:
@@ -59,22 +69,30 @@ async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(
 
       ann_predictor = ANNPredictor(ann_test_in_path, ann_predictions_output_path, ann_graph_output_path, ann_model_path, ann_scaler_input_path, ann_scaler_output_path)
       ann_predictor.run()
+    else:
+      ann_predictions_output_path = None
+      ann_graph_output_path = None
 
-    return [
-       {
-       "ann_predictions": {
-          "img":ann_graph_output_path,
-          "excel":ann_predictions_output_path
-       }},
-       {
-       "lr_predictions": {
-          "img":lr_graph_output_path,
-          "excel":lr_predictions_output_path
-       }},
-       {
-       "svm_predictions": {
-          "img":svm_graph_output_path,
-          "excel":svm_predictions_output_path
-       }}
-       ]
+
+    responce = [
+      {
+      "ann_predictions": {
+        "img": ann_graph_output_path ,
+        "excel":ann_predictions_output_path 
+      }},
+      {
+      "lr_predictions": {
+        "img":lr_graph_output_path ,
+        "excel":lr_predictions_output_path 
+      }},
+      {
+      "svm_predictions": {
+        "img":svm_graph_output_path ,
+        "excel":svm_predictions_output_path ,
+      }}
+      ]
+
+
+
+    return responce
 
