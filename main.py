@@ -26,7 +26,7 @@ UPLOAD_FOLDER = "data"
 os.makedirs(UPLOAD_FOLDER,exist_ok=True)
 
 @app.post("/uploadfile/")
-async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(...)):
+async def create_upload_file(svm:bool=False ,lr:bool=False ,ann:bool=False ,file: UploadFile = File(...)):
     
     file_location = os.path.join(UPLOAD_FOLDER, file.filename)
     
@@ -84,18 +84,18 @@ async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(
       {
       "ann_predictions": {
        
-        "img": base_http_url + ann_graph_output_path,
-        "excel": base_http_url + ann_predictions_output_path
+        "img": base_http_url + ann_graph_output_path if ann_graph_output_path else None,
+        "excel": base_http_url + ann_predictions_output_path if ann_predictions_output_path else None
       }},
       {
       "lr_predictions": {
-        "img":  base_http_url + lr_graph_output_path,
-        "excel": base_http_url + lr_predictions_output_path ,
+        "img":  base_http_url + lr_graph_output_path if lr_graph_output_path else None,
+        "excel": base_http_url + lr_predictions_output_path if lr_predictions_output_path else None ,
       }},
       {
       "svm_predictions": {
-        "img": base_http_url + svm_graph_output_path,
-        "excel": base_http_url + svm_predictions_output_path,
+        "img": base_http_url + svm_graph_output_path if svm_graph_output_path else None,
+        "excel": base_http_url + svm_predictions_output_path if svm_predictions_output_path else None,
       }}
       ]
 
