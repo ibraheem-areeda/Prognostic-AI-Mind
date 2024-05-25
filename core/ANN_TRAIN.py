@@ -2,11 +2,14 @@
 
 import pandas as pd
 import numpy as np
-import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 import pickle
+
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import tensorflow as tf
 
 # File paths
 input_file = r'./model/input.xlsx'

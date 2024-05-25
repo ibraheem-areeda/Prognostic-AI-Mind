@@ -1,9 +1,13 @@
 import pandas as pd
 import numpy as np
-import tensorflow as tf
 import pickle
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
+
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import tensorflow as tf
+
 
 class ANNPredictor:
     def __init__(self, test_in_path, predictions_output_path, graph_output_path, model_path, scaler_input_path, scaler_output_path):
