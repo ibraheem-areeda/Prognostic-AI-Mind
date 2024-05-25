@@ -1,8 +1,11 @@
 import pathlib
 import shutil
-from fastapi import FastAPI
+from fastapi import FastAPI, Path
 from fastapi import FastAPI, File, UploadFile
 import os
+
+from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 
 from core.ANN import ANNPredictor
 from core.LR import LRPredictor
@@ -30,6 +33,7 @@ async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(
     with open(file_location, "wb") as file_object:
         file_object.write(await file.read())
     
+    app.mount("/output", StaticFiles(directory="output"), name="output")
  
     if svm:
       svm_test_in_path = f'data/{file.filename}'
@@ -74,22 +78,24 @@ async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(
       ann_graph_output_path = None
 
     base_http_url = 'http://204.12.253.248:8080/'
+    # a = Path(ann_graph_output_path)
 
     responce = [
       {
       "ann_predictions": {
-        "img": pathlib.Path(ann_graph_output_path).resolve().as_uri().replace('file://', base_http_url),
-        "excel": pathlib.Path(ann_predictions_output_path).resolve().as_uri().replace('file://', base_http_url) 
+       
+        "img": base_http_url + ann_graph_output_path,
+        "excel": base_http_url + ann_predictions_output_path
       }},
       {
       "lr_predictions": {
-        "img":  pathlib.Path(lr_graph_output_path).resolve().as_uri().replace('file://', base_http_url) ,
-        "excel": pathlib.Path(lr_predictions_output_path).resolve().as_uri().replace('file://', base_http_url) ,
+        "img":  base_http_url + lr_graph_output_path,
+        "excel": base_http_url + lr_predictions_output_path ,
       }},
       {
       "svm_predictions": {
-        "img": pathlib.Path(svm_graph_output_path).resolve().as_uri().replace('file://', base_http_url) ,
-        "excel": pathlib.Path(svm_predictions_output_path).resolve().as_uri().replace('file://', base_http_url) ,
+        "img": base_http_url + svm_graph_output_path,
+        "excel": base_http_url + svm_predictions_output_path,
       }}
       ]
 
