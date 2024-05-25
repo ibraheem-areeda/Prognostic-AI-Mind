@@ -73,22 +73,23 @@ async def create_upload_file(svm:bool,lr:bool,ann:bool ,file: UploadFile = File(
       ann_predictions_output_path = None
       ann_graph_output_path = None
 
+    base_http_url = 'http://204.12.253.248:8080/'
 
     responce = [
       {
       "ann_predictions": {
-        "img": pathlib.Path(ann_graph_output_path).resolve().as_uri() ,
-        "excel": pathlib.Path(ann_predictions_output_path).resolve().as_uri() 
+        "img": pathlib.Path(ann_graph_output_path).resolve().as_uri().replace('file://', base_http_url),
+        "excel": pathlib.Path(ann_predictions_output_path).resolve().as_uri().replace('file://', base_http_url) 
       }},
       {
       "lr_predictions": {
-        "img":  pathlib.Path(lr_graph_output_path).resolve().as_uri() ,
-        "excel": pathlib.Path(lr_predictions_output_path).resolve().as_uri() ,
+        "img":  pathlib.Path(lr_graph_output_path).resolve().as_uri().replace('file://', base_http_url) ,
+        "excel": pathlib.Path(lr_predictions_output_path).resolve().as_uri().replace('file://', base_http_url) ,
       }},
       {
       "svm_predictions": {
-        "img": pathlib.Path(svm_graph_output_path).resolve().as_uri() ,
-        "excel": pathlib.Path(svm_predictions_output_path).resolve().as_uri() ,
+        "img": pathlib.Path(svm_graph_output_path).resolve().as_uri().replace('file://', base_http_url) ,
+        "excel": pathlib.Path(svm_predictions_output_path).resolve().as_uri().replace('file://', base_http_url) ,
       }}
       ]
 
