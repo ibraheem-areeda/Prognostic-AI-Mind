@@ -88,7 +88,7 @@ async def create_upload_file(svm:bool=False ,lr:bool=False ,ann:bool=False ,file
       ann_predictions_output_path = None
       ann_graph_output_path = None
 
-    base_http_url = 'http://204.12.253.248:8080/'
+    base_http_url = 'https://areeda.net/'
     # a = Path(ann_graph_output_path)
 
     responce = [
