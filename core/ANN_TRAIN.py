@@ -1,22 +1,18 @@
-# train_and_save_ann_model.py
-
 import pandas as pd
 import numpy as np
+import tensorflow as tf
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
 import pickle
 
-import os
-os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-import tensorflow as tf
-
 # File paths
-input_file = r'./model/input.xlsx'
-output_file = r'./model/output.xlsx'
-model_path = r'./model/ann_model.keras'
 scaler_input_path = r'./model/ann_scaler_input.pkl'
 scaler_output_path = r'./model/ann_scaler_output.pkl'
+input_file = r'./model/input.xlsx'
+output_file = r'./model/output.xlsx'
+model_path = r'./model/ann_model.pkl'
+
 
 # Step 1: Read data from Excel files
 input_data = pd.read_excel(input_file, header=None)
@@ -77,5 +73,10 @@ with open(scaler_input_path, 'wb') as f:
 with open(scaler_output_path, 'wb') as f:
     pickle.dump(scaler_output, f)
 
-# Save the model in the Keras format
-model.save(model_path, save_format='keras')
+# Save the model architecture and weights as a dictionary using pickle
+model_dict = {
+    "model_config": model.to_json(),
+    "model_weights": model.get_weights()
+}
+with open(model_path, 'wb') as f:
+    pickle.dump(model_dict, f)

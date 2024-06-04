@@ -8,7 +8,7 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
-from core.ANN import ANNPredictor
+from core.ANN import ANNModelPredictor
 from core.LR import LRPredictor
 from core.SVM import SVMPredictor
 
@@ -78,12 +78,14 @@ async def create_upload_file(svm:bool=False ,lr:bool=False ,ann:bool=False ,file
       ann_test_in_path = f'data/{file.filename}'
       ann_predictions_output_path = r'output/ann_predictions.xlsx'
       ann_graph_output_path = r'output/ann_predictions.png'
-      ann_model_path = r'model/ann_model.keras'
+      ann_model_path = r'model/ann_model.pkl'
       ann_scaler_input_path = r'model/ann_scaler_input.pkl'
       ann_scaler_output_path = r'model/ann_scaler_output.pkl'
 
-      ann_predictor = ANNPredictor(ann_test_in_path, ann_predictions_output_path, ann_graph_output_path, ann_model_path, ann_scaler_input_path, ann_scaler_output_path)
-      ann_predictor.run()
+
+
+      predictor = ANNModelPredictor(ann_test_in_path, ann_model_path, ann_scaler_input_path, ann_scaler_output_path, ann_predictions_output_path, ann_graph_output_path)
+      predictor.run()
     else:
       ann_predictions_output_path = None
       ann_graph_output_path = None
